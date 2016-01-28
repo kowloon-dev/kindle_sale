@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+  <!-- Form
+  ================================================== -->
+<div class="form">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <p class="lead">
+          {{ text }}
+        </p>
+        <form action="/kindle_sale/register" method="post" class="form-inline">
+          <label for="keyword">ASIN/書名</label>
+          <input type="text" class="form-control" id="keyword" name="keyword" placeholder="keyword">
+          <button type="submit" class="btn btn-default">再検索</button>
+        </form>
+        <p>
+          {% if search_result %}
+            <form action="/kindle_sale/register_exec" method="post" class="form-inline">
+              <table cellpadding="10">
+                {{ search_result |safe}}
+              </table>
+              <button type="submit" class="btn btn-default">登録実行</button>
+            </form>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+  <!-- Form
+  ================================================== -->
+<div class="form">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <p class="lead">
+          {{ text }}
+        </p>
+          <form action="/kindle_sale/register" method="post" class="form-inline">
+            <label for="keyword">ASIN/書名</label>
+            <input type="text" class="form-control" id="keyword" name="keyword" placeholder="keyword">
+            <button type="submit" class="btn btn-default">検索</button>
+          </form>
+        </p>
+        <hr>
+        {% if registered_item %}
+          {{ registered_msg |safe}}
+          <ul>
+            {{ registered_item |safe}}
+          </ul>
+        {% endif %}
+        {% if regist_err_item %}
+          {{ regist_err_msg |safe}}
+          <ul>
+            {{ regist_err_item |safe}}
+          </ul>
+        {% endif %}
+        {% if item_list %}
+          {{ item_list_msg |safe}}
+          <table border="1">
+            <tr align="left"><th>タイトル</th><th>登録価格</th><th>閾値</th></tr>
+            {{ item_list |safe}}
+          </table>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
