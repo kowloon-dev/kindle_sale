@@ -20,7 +20,7 @@ except:
 
 # ------------  Import parameters from config file  ------------
 
-# [ItemSearch] section
+# [ItemSearch]
 access_key_id = config.get('ItemSearch', 'access_key_id')
 secret_key =    config.get('ItemSearch', 'secret_key')
 associate_tag = config.get('ItemSearch', 'associate_tag')
@@ -28,21 +28,23 @@ search_index =  config.get('ItemSearch', 'search_index')
 item_page =     int(config.get('ItemSearch', 'item_page'))
 region =        config.get('ItemSearch', 'region')
 
-# [GetPrice] section
+# [GetPrice]
 price_tag =       config.get('GetPrice', 'price_tag')
 price_class =     config.get('GetPrice', 'price_class')
 retry_sleep_min = int(config.get('GetPrice', 'retry_sleep_min'))
 retry_sleep_max = int(config.get('GetPrice', 'retry_sleep_max'))
 retry_max =       int(config.get('GetPrice', 'retry_max'))
+currency_symbol = config.get('GetPrice', 'currency_symbol')
 
-# [Global] section
+# [Global]
 base_url = config.get('Global', 'base_url')
 
-# [Logging] section
+# [Logging]
 logging_level = config.get('Logging', 'logging_level')
-log_filename = pardir_path + "/log/" + config.get('Logging', 'log_filename')
+log_dir = pardir_path + "/log/"
+log_filename = log_dir + config.get('Logging', 'log_filename')
 
-# [MailSend] section
+# [MailSend]
 smtp_host =     config.get('MailSend', 'smtp_host')
 smtp_port =     config.get('MailSend', 'smtp_port')
 local_host =    config.get('MailSend', 'local_host')
@@ -52,7 +54,7 @@ from_addr =     config.get('MailSend', 'from_addr')
 to_addr =       config.get('MailSend', 'to_addr')
 mail_title =    config.get('MailSend', 'mail_title')
 
-# [SQL] section
+# [SQL]
 db =         pardir_path + "/db/" + config.get('SQL', 'db_filename')
 item_table = config.get('SQL', 'item_table')
 
