@@ -20,12 +20,21 @@ class GetPrice:
             self.retry_sleep_min = ci.retry_sleep_min
             self.retry_sleep_max = ci.retry_sleep_max
             self.retry_max = ci.retry_max
+            self.currency_symbol = ci.currency_symbol
         except:
             err = "Read config failed.\n"
             log_control.logging.error(err + traceback.format_exc())
             raise
 
     def get_price(self,asin):
+
+        # Initializing variables
+        price = ""
+        url = ""
+        get_result = ""
+        soup = ""
+        scraped_code = ""
+        price_textline = ""
 
         # ASIN番号からWebページURLを生成
         url = self.base_url + asin + "/"
@@ -55,37 +64,36 @@ class GetPrice:
         soup = BeautifulSoup(get_result.text, "html.parser")
         scraped_code = soup.find("b", class_="priceLarge")
 
-        # コードの各行を精査し、文字「￥」の含まれる行を探す
-        #     見つけたら変数price_textlineに格納してループを抜ける
-        #     見つからない場合は変数price_textlineの中身を空に維持
+        # seek textline contains "currency simbol"(ex. in US:$, in Japan:￥)
         for line in scraped_code:
-            if line.find("￥") >= 0:
+            if line.find(self.currency_symbol) >= 0:
                 price_textline = line
                 break
             else:
                 price_textline = ""
 
         if len(price_textline) == 0:
-            log_control.logging.error(asin + " 価格の含まれる行を検出できませんでした.")
+            log_control.logging.error(asin + " Extracting price_textline failed.")
             return
 
-        #  文字「￥」で価格の行を分割し、2番目の要素(文字「￥」より後ろの要素)を取り出し
-        price = price_textline.split("￥")[1]
+        # divide textline by currency simbol, and pick up second element
+        price = price_textline.split(self.currency_symbol)[1]
 
-        # 改行文字を除去
+        # remove carriage return
         price = price.replace("\n","")
 
-        # カンマを除去
+        # remove comma
         price = price.replace(",","")
 
-        # スペースを除去
+        # remove space
         price = price.replace(" ","")
 
         try:
+            # If succeeded, return with price
             price = int(price)
-            log_control.logging.debug(asin + " 価格の抽出に成功しました.")
+            log_control.logging.debug(asin + " Extracting price succeeded.")
             return price
         except:
-            # 失敗した場合は空の戻り値を返す
-            log_control.logging.error(asin + " 価格の抽出に失敗しました.")
+            # If failed, return with nothing
+            log_control.logging.error(asin + " Extracting price failed.")
             return
